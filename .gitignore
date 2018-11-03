@@ -1,0 +1,4 @@
+venv3
+.ipynb_checkpoints/
+*.jpg
+*.session
