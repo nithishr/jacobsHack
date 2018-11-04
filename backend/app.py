@@ -56,7 +56,7 @@ def get_message_counts_by_day():
     res = {}
     for x in messages_db.find():
         # print(x['timestamp'], x['message'])
-        if 'sender' and 'receiver' not in x:
+        if 'sender' and 'receiver' not in x or x['type'] =='slack':
             continue
         sr = (x['sender'], x['receiver'])
         dt = datetime.utcfromtimestamp(x['timestamp'])
