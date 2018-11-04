@@ -207,6 +207,10 @@ def get_slack_msgs():
         payload['user'] = user_profile
         payload['user_profile'] = user_pic_url
         payload['type'] = 'slack'
+        team_info = slack.team.info().body
+        print(team_info)
+        team = team_info['team']['name']
+        payload['channel'] = team + '.' + payload['channel']
         print(payload)
         result = messages_db.insert_one(payload)
         index.add_object(payload)

@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Timeline from './Timeline.js';
-import Sidebar from './Sidebar.js';
 import Thumbnails from './Tip/Thumbnails.js';
 import ListofMessages from './Tip/Messages/ListofMessages';
 import './InfoTip.css';
