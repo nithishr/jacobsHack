@@ -1,0 +1,20 @@
+.messageContainer{
+    display: inline-block;
+    padding: 30px;
+}
+
+.messageContainer:hover{
+    background-color: antiquewhite;
+}
+.senderName{
+    font-weight: bolder;
+    font-size: 20px;
+}
+
+.dateofRec{
+    color: #C8B3D1;
+}
+
+.recMessage{
+    color: #6A747D;
+}
