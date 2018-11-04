@@ -53,6 +53,12 @@ def get_message_counts_by_day():
     me = client.get_me()
     global api_id, messages_db
 
+    milestones = {}
+
+    #max_freq_months = {}
+
+    #max_freq_days = {}
+
     res = {}
     for x in messages_db.find():
         # print(x['timestamp'], x['message'])
@@ -60,7 +66,60 @@ def get_message_counts_by_day():
             continue
         sr = (x['sender'], x['receiver'])
         dt = datetime.utcfromtimestamp(x['timestamp'])
+
+        year = dt.year
+        month = dt.month
+        day = dt.day
+
         dt_day = (dt.year, dt.month, dt.day)
+
+        if year not in milestones:
+            milestones[year] = {str(k) : [] for k in range(1,13)}
+            milestones[year]["milestones"] = [{
+                "pos" : 0,
+                "id" : k,
+                "freq" : 0,
+                "timestamp" : str(dt_day)
+            } for k in range(1,13)]
+
+        month_normalized = month * 1.0 / 12
+        day_normalized = day * 1.0 / 30
+
+        # print(len(milestones[year]["milestones"]))
+        milestones[year]["milestones"][month-1]["pos"] = month_normalized
+        milestones[year]["milestones"][month-1]["freq"] += 1
+        #if year not in max_freq_months:
+            #max_freq_months[year] = {k : 0 for k in range(1,13)}
+        #max_freq_months[year][month] = max(
+        #    max_freq_months[year][month], milestones[year][month-1]["milestones"]["freq"])
+
+        day_found = False
+        for d in milestones[year][str(month)]:
+            if d["id"] == day:
+                d["freq"] += 1
+                day_found = True
+                break
+                #max_freq_days[]
+        if not day_found:
+            milestones[year][str(month)].append(
+                {
+                    "pos": day * 1.0 / 31,
+                    "id" : year  * 100 + day,
+                    "freq" : 0,
+                    "timestamp" : str(dt_day)
+                })
+
+
+        for k,v in milestones.items():
+            for mk, mv in v.items():
+                if mk == "milestones":
+                    for m in mv:
+                        m["freq"] = m["freq"] * 1.0 / 10
+                else:
+                    for d in mv:
+                        d["freq"] = d["freq"] * 1.0 / 10
+
+        
         if x['receiver'] not in res:
             res[x['receiver']] = {
                 "meta" : {
@@ -95,7 +154,7 @@ def get_message_counts_by_day():
             print(d,c)
     '''
 
-    return jsonify(res)
+    return jsonify(milestones)
 
 
 
