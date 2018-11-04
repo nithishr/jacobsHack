@@ -3,6 +3,7 @@ import json
 from slacker import Slacker
 import os
 from pymongo import MongoClient
+from algoliasearch import algoliasearch
 
 app = Flask(__name__)
 slack = Slacker(os.getenv('SLACK_KEY'))
@@ -10,6 +11,9 @@ conn_string = "mongodb://jhack:abcd1234#@ds151513.mlab.com:51513/message-hub"
 client = MongoClient(conn_string)
 db = client.get_database()
 messages_db = db['messages']
+client = algoliasearch.Client("FLBYK5GQ8Z", 'e5f2da5cd1089729b8f4b5633e9fec41')
+index = client.init_index('messages')
+
 
 @app.route('/')
 def hello_world():
@@ -55,6 +59,9 @@ def get_slack_msgs():
         payload['type'] = 'slack'
         print(payload)
         result = messages_db.insert_one(payload)
+        index.add_object(payload)
+        index.set_settings({"searchableAttributes": ["channel", "message", "user",
+                                                     "type"]})
         return 'Ok'
 
 if __name__ == '__main__':
