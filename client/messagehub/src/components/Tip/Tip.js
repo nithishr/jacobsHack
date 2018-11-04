@@ -14,18 +14,23 @@ class Tip extends Component {
 
   render() {
     return (
-      <div class = "container">
-        <div className="Tip" class = "row">
-            <div className = "text-content" class ="col">
-              <TextContents />
-            </div>
+      <div id="TipUpper">
+        <div class="container">
+          <div className="Tip" class = "row">
 
-            <div class="col">
-                <Thumbnails className = "Thumbnails" />
-            </div>
-        </div>    
-      </div>
-        
+              <div className="text-content" class="col-sm-4">
+                <TextContents />
+              </div>
+
+              <div className="img-content" class="col-sm-4">
+                  <Thumbnails className = "Thumbnails" />
+              </div>
+
+              <div class="clearfix"></div>
+          </div>
+          </div>
+        </div>
+
     );
   }
 }

@@ -14,7 +14,7 @@ class Header extends Component {
       <div className="Header">
         <header className="App-header">
         <nav class="navbar-fixed navbar navbar-expand-lg navbar-dark bg-dark">
-          <a class="navbar-brand" href="#">MessengerHub</a>
+          <a class="navbar-brand" href="#"><i class="far fa-comments"></i> MessengerHub</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -25,9 +25,6 @@ class Header extends Component {
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Features</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
               </li>
             </ul>
             <span class="navbar-text">
