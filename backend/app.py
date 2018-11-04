@@ -174,16 +174,16 @@ def get_slack_msgs():
             channel = 'Direct Message'
         if "files" in in_req['event']:
             payload['files'] = in_req['event']['files']
-        payload['channel'] = channel
+        payload['receiver'] = channel
         payload['message'] = message
         payload['timestamp'] = timestamp
-        payload['user'] = user_profile
+        payload['sender'] = user_profile
         payload['user_profile'] = user_pic_url
         payload['type'] = 'slack'
         team_info = slack.team.info().body
         print(team_info)
         team = team_info['team']['name']
-        payload['channel'] = team + '.' + payload['channel']
+        payload['receiver'] = team + '.' + payload['receiver']
         print(payload)
         result = messages_db.insert_one(payload)
         index.add_object(payload)

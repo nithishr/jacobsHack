@@ -1,5 +1,6 @@
 algoliasearch==1.17.0
 appdirs==1.4.3
+async-generator==1.10
 certifi==2018.10.15
 chardet==3.0.4
 click==6.7
@@ -9,11 +10,15 @@ itsdangerous==0.24
 Jinja2==2.9.6
 MarkupSafe==1.0
 packaging==16.8
+pyaes==1.6.1
+pyasn1==0.4.4
 pymongo==3.7.2
 pyparsing==2.2.0
 requests==2.20.0
+rsa==4.0
 six==1.10.0
 slacker==0.9.42
+Telethon==1.4.1
+Telethon-sync==1.1.1
 urllib3==1.24.1
 Werkzeug==0.12.1
-pymongo==3.7.2
