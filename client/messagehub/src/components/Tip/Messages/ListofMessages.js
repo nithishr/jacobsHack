@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 // import './ListofMessage.css';
 import Message from './Message';
 class ListofMessages extends Component {
