@@ -3,3 +3,4 @@ venv3
 *.jpg
 *.session
 whoiscris.session-journal
+client/messagehub/yarn.lock
