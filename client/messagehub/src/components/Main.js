@@ -4,12 +4,18 @@ import Sidebar from './Sidebar.js';
 
 
 class Main extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
+
+    this.clickContact = this.clickContact.bind(this);
+
   }
 
   componentWillMount(){
+  }
 
+  clickContact(){
+    console.log("Contact")
   }
 
   render() {
@@ -18,7 +24,7 @@ class Main extends Component {
         <div class="wrapper">
 
           <nav id="sidebar">
-            <Sidebar />
+            <Sidebar onClick={this.clickContact.bind(this)} />
           </nav>
 
           <div id="content">

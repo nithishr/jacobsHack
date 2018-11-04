@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import TimelineLower from './TimelineLower';
 
 class Timeline extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
 
     this.state = {
       milestones: [
@@ -31,13 +32,15 @@ class Timeline extends Component {
         id:"3",
         freq:"0.9"
       },
-      ]
-    };
+    ],
+    }
+
   }
 
   componentWillMount(){
-
   }
+
+
 
   composeGradient(){
   var percentColors = [
@@ -96,9 +99,12 @@ class Timeline extends Component {
 
   composeMilestones(){
     const milestones = this.state.milestones
-    return milestones.map((milestone) =>
-    <i class="timeline--inner-pin is-featured" style={{left: milestone["pos"] + "%"}} data-title="Featured Pin"></i>
-  );
+    return milestones.filter((milestone) =>  milestone["freq"] > 0.3).map((milestone, id) =>
+        <i key={"ielement"+id} class="timeline--inner-pin is-featured" style={{
+        width: milestone["freq"]*20+"px",
+        height: milestone["freq"]*20+"px",
+        left: milestone["pos"] + "%"}} data-title="Featured Pin"></i>
+      );
   }
 
   render() {
@@ -106,18 +112,18 @@ class Timeline extends Component {
     return (
       <div id="Timeline">
 
-      <section class="container">
-        <section class="timeline" style={timelineGradient}>
-          <figure class="timeline--inner">
-          {this.composeMilestones()}
-          </figure>
+      <div class="timeline-inner">
+        <section class="container">
+          <section class="timeline" style={timelineGradient}>
+            <figure class="timeline--inner">
+            {this.composeMilestones()}
+            </figure>
+          </section>
         </section>
-      </section>
 
-        <div className="timeline-begin texto">
-        JAN 2017</div>
-        <div className="timeline-end texto">
-        DEC 2017</div>
+        <TimelineLower />
+
+        </div>
       </div>
     );
   }

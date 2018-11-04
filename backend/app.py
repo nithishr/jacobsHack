@@ -11,6 +11,7 @@ import os
 from pymongo import MongoClient
 import asyncio
 from datetime import timezone
+from algoliasearch import algoliasearch
 
 app = Flask(__name__)
 slack = Slacker(os.getenv('SLACK_KEY'))
@@ -18,6 +19,9 @@ conn_string = "mongodb://jhack:abcd1234#@ds151513.mlab.com:51513/message-hub"
 client = MongoClient(conn_string)
 db = client.get_database()
 messages_db = db['messages']
+client = algoliasearch.Client("FLBYK5GQ8Z", 'e5f2da5cd1089729b8f4b5633e9fec41')
+index = client.init_index('messages')
+
 
 api_id = 632827
 api_hash = '2bf8105b9536dbb821d61d00c621c16f'
@@ -39,6 +43,17 @@ if not client.is_user_authorized():
 @app.route('/')
 def hello_world():
     return 'Hello World!'
+
+@app.route('/count', methods=['GET'])
+def get_message_counts_by_day():
+    sender_receiver_to_messages = {}
+    global api_id, messages_db
+    for x in messages_db.find({"user": "Cris"}):
+        print(x)
+
+    return 'Ok'
+
+
 
 @app.route('/telegram-hose', methods=['POST'])
 def get_telegram_msgs():
@@ -68,7 +83,9 @@ def get_telegram_msgs():
 
                 msg = message.message
                 user_id = message.from_id
-                user_name = sender_first_name + ',' + sender_last_name
+                user_name = sender_first_name
+                if sender_last_name:
+                    user_name += ',' + sender_last_name
                 timestamp = int(message.date.replace(tzinfo=timezone.utc).timestamp())
                 channel_id = message.id
                 payload['message'] = msg
@@ -77,6 +94,9 @@ def get_telegram_msgs():
                 payload['type'] = 'telegram'
                 print(payload)
                 result = messages_db.insert_one(payload)
+                index.add_object(payload)
+                index.set_settings({"searchableAttributes": ["channel", "message", "user",
+                                                             "type"]})
     return 'Ok'
     
 
@@ -91,17 +111,28 @@ def get_slack_msgs():
     else:
         print(in_req)
         payload = {}
-        message = in_req['event']['text']
-        user_id = in_req['event']['user']
+        try:
+            message = in_req['event']['text']
+        except:
+            message = ''
+        try:
+            user_id = in_req['event']['user_id']
+        except:
+            user_id = ''
         user_details = slack.users.profile.get(user_id).body
         user_profile = user_details['profile']['real_name']
         user_pic_url = user_details['profile']['image_72']
         timestamp = in_req['event_time']
-        channel_id = in_req['event']['channel']
+        try:
+            channel_id = in_req['event']['channel']
+        except:
+            channel_id = in_req['event']['channel_id']
         if channel_id.startswith('C'):
             channel = slack.channels.info(channel_id).body['channel']['name']
         else:
             channel = 'Direct Message'
+        if "files" in in_req['event']:
+            payload['files'] = in_req['event']['files']
         payload['channel'] = channel
         payload['message'] = message
         payload['timestamp'] = timestamp
@@ -110,6 +141,9 @@ def get_slack_msgs():
         payload['type'] = 'slack'
         print(payload)
         result = messages_db.insert_one(payload)
+        index.add_object(payload)
+        index.set_settings({"searchableAttributes": ["channel", "message", "user",
+                                                     "type"]})
         return 'Ok'
 
 if __name__ == '__main__':
