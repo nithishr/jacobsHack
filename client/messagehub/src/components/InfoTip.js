@@ -3,19 +3,70 @@ import Thumbnails from './Tip/Thumbnails.js';
 import ListofMessages from './Tip/Messages/ListofMessages';
 import './InfoTip.css';
 
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
+}
 
 class InfoTip extends Component {
   constructor(props){
     super(props);
 
+    this.state = {
+      content: {
+        messageSum: {
+        topics: ["weather", "november event", "drinking"],
+        texts: 253,
+        participants: ["steph", "carol"],
+        },
+        eventSum: {
+          date: "18.10.2018",
+          location: "Bremen",
+          address: "Campus Road 1",
+          participants: ["steph", "carol"],
+          notes: "-"
+        }
+      }
+    }
+
   }
 
-  componentWillMount(){
+  componentWillUpdate(nextProps, nextState){
+  if (this.state.rawMessages == undefined) {
+    const date =  new Date("2018", "5", "23") //TODO change
+    const newProps = nextProps.content.rawMessages.map(function(el, i) {
+    return {
+      ...el,
+      timestamp: new Date(timeConverter(el.timestamp))
+    }}).filter((el) =>
+    (
+      (el.timestamp.getDate() - 1) == date.getDate()
+    || (el.timestamp.getDate() +1) == date.getDate()
+    )
+    && (el.timestamp.getMonth() - 1) == date.getMonth()
+  )
+
+    this.state = {
+      ...this.state,
+      rawMessages: newProps,
+    }
+    console.log(newProps)
+    console.log(this.state)
+  }
+
   }
 
 
  composeTopics(){
-   return this.props.content.messageSum.topics.map((el, i) => <span key={"topicbadge"+i} class="topicLabels" class="badge badge-success ml-1 mr-1 pd-5">{el}</span>);
+   return this.state.content.messageSum.topics.map((el, i) => <span key={"topicbadge"+i} class="topicLabels" class="badge badge-success ml-1 mr-1 pd-5">{el}</span>);
  }
 
  composeParticipants(participants){
@@ -25,7 +76,7 @@ class InfoTip extends Component {
  }
 
  composeEvent(){
-   if(this.props.content.eventSum.date == undefined || this.props.content.eventSum.date == ""){
+   if(this.state.content.eventSum.date == undefined || this.state.content.eventSum.date == ""){
      return (
        <div class="eventInfo">
        No Event
@@ -35,11 +86,11 @@ class InfoTip extends Component {
      return (
        <div class="eventInfo">
          <i class="far fa-calendar"></i>
-         &nbsp; {this.props.content.eventSum.date} <br />
-         Location: {this.props.content.eventSum.location}<br />
-         Address: <a href="#"> {this.props.content.eventSum.address} </a><br />
-         Participants: {this.composeParticipants(this.props.content.eventSum.participants)}<br />
-         Notes: {this.props.content.eventSum.notes}<br />
+         &nbsp; {this.state.content.eventSum.date} <br />
+         Location: {this.state.content.eventSum.location}<br />
+         Address: <a href="#"> {this.state.content.eventSum.address} </a><br />
+         Participants: {this.composeParticipants(this.state.content.eventSum.participants)}<br />
+         Notes: {this.state.content.eventSum.notes}<br />
        </div>
      );
    }
@@ -51,7 +102,7 @@ class InfoTip extends Component {
 
         <div class="text-column">
           <i class="far fa-comments"></i> Freq Topics: {this.composeTopics()} <br />
-          #Texts: {this.props.content.messageSum.texts} <br />
+          #Texts: {this.state.content.messageSum.texts} <br />
           <div class="msg-button">
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#messages"><i class="fas fa-envelope"></i></button>
           </div>
@@ -81,7 +132,7 @@ class InfoTip extends Component {
           </div>
 
 
-          Participants: {this.composeParticipants(this.props.content.messageSum.participants)}<br />
+          Participants: {this.composeParticipants(this.state.content.messageSum.participants)}<br />
           <hr class="white-spacer" />
           {this.composeEvent()}
         </div>

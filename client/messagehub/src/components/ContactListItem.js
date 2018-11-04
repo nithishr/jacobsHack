@@ -11,7 +11,7 @@ class ContactListItem extends Component {
 
   render() {
     return (
-      <div className="ContactListItem" onClick={() => this.props.onClick(this.props.contact.id)}>
+      <div className="ContactListItem" onClick={() => this.props.onClick(this.props.contact.name)}>
 
       <div class="row sideBar">
         <div class="row sideBar-body">
@@ -29,7 +29,7 @@ class ContactListItem extends Component {
               </div>
               <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
                 <span class="time-meta pull-right">
-                {this.props.contact.timestamp}
+
               </span>
               </div>
             </div>

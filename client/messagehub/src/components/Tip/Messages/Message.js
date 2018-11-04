@@ -4,6 +4,7 @@ import './Message.css';
 class Message extends Component {
   constructor(props){
     super(props);
+
   }
 
   componentWillMount(){
@@ -12,7 +13,7 @@ class Message extends Component {
 
   render() {
     return (
-        <div className="messageContainer">
+        <div className={"messageContainer "+this.props.from} >
             <div class = "row" className="dateofRec">
             {this.props.time}
             </div>

@@ -159,30 +159,30 @@ class Main extends Component {
   ]
 
     this.state = {
-      activeUser: 0,
-      content: content
+      activeUser: "Anil",
+      content: [],
+      content2: content
     }
   }
 
   componentDidMount() {
-    axios
-      .get("https://jsonplaceholder.typicode.com/users")
-      .then(response => {
+    /*.get("http://67395507.ngrok.io/count")*/
+    /*.get("https://jsonplaceholder.typicode.com/users")*/
+    //.get("http://a5167715.ngrok.io/count")
+    /*.get("http://fe7a5316.ngrok.io/count")*/
 
+
+    axios
+    .get("http://a5167715.ngrok.io/count")
+      .then(response => {
         // create an array of contacts only with relevant data
-        const newContacts = response.data.map(c => {
-          return {
-            id: c.id,
-            name: c.name
-          };
-        });
-        
+
         const newState = Object.assign({}, this.state, {
-          contacts: newContacts
+          content: response.data
         });
-        console.log(newState)
-        // store the new state object in the component's state
-        //this.setState(newState);
+
+        console.log(response)
+        this.setState(newState);
       })
       .catch(error => console.log(error));
   }
@@ -198,9 +198,20 @@ class Main extends Component {
   }
 
   composeContactList(){
-
-   return this.state.content.map((el, i) => el.meta)
+    var retArr = []
+    var counter = 0
+    for(var el in this.state.content){
+      retArr.push({name: this.state.content[el].meta.name, id: counter})
+      counter++
+    }
+    return retArr
+   //return this.state.content2.map((el, i) => el.meta)
   }
+
+  composePeaks(){
+    return this.state.content[this.state.activeUser]
+  }
+
 
   render() {
     return (
@@ -212,7 +223,7 @@ class Main extends Component {
           </nav>
 
           <div id="content">
-          <Timeline content={this.state.content[this.state.activeUser].peaks} />
+          <Timeline content={this.composePeaks()} />
           </div>
 
           <div class="clearfix"></div>

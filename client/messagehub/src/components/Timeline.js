@@ -14,34 +14,40 @@ class Timeline extends Component {
       {
         pos: "0",
         id:"0",
-        freq:"0.1"
+        freq:"0.1",
+        //timestamp: "1527110793"
       },
       {
         pos: "20",
         id:"1",
-        freq:"0.4"
+        freq:"0.4",
+        //timestamp: "1527110793"
       },
       {
         pos: "30",
         id:"2",
-        freq:"0.8"
+        freq:"0.8",
+        //timestamp: "1527110793"
       },
       {
         pos: "50",
         id:"3",
-        freq:"0.3"
+        freq:"0.3",
+        //timestamp: "1527110793"
       },
       {
         pos: "80",
         id:"3",
-        freq:"0.9"
+        freq:"0.9",
+        //timestamp: "1527110793"
       },
     ],
     }
 
   }
 
-  componentWillMount(){
+  componentWillUpdate(nextProps){
+    console.log(nextProps)
   }
 
   changePeak(id){
@@ -110,6 +116,7 @@ class Timeline extends Component {
         height: milestone["freq"]*20+"px",
         left: milestone["pos"] + "%"}} data-title="Featured Pin" onClick={this.changePeak.bind(this, id)} ></i>
       );
+
   }
 
   render() {
@@ -117,7 +124,7 @@ class Timeline extends Component {
     return (
       <div id="Timeline">
 
-      <InfoTip content={this.props.content[this.state.activePeak]} />
+      <InfoTip content={this.props.content} />
 
       <div class="timeline-inner">
         <section class="container">
