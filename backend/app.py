@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from telethon import TelegramClient, events, sync, utils
 from telethon import functions, types
 from telethon.tl.functions.messages import GetDialogsRequest
@@ -13,8 +13,10 @@ import asyncio
 from datetime import timezone
 from datetime import datetime
 from algoliasearch import algoliasearch
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 slack = Slacker(os.getenv('SLACK_KEY'))
 conn_string = "mongodb://jhack:abcd1234#@ds151513.mlab.com:51513/message-hub"
 client = MongoClient(conn_string)
@@ -48,24 +50,111 @@ def hello_world():
 @app.route('/count', methods=['GET'])
 def get_message_counts_by_day():
     sender_receiver_to_messages = {}
+    me = client.get_me()
     global api_id, messages_db
+
+    milestones = {}
+
+    #max_freq_months = {}
+
+    #max_freq_days = {}
+
+    res = {}
     for x in messages_db.find():
-        print(x['timestamp'], x['message'])
+        # print(x['timestamp'], x['message'])
+        if 'sender' and 'receiver' not in x:
+            continue
         sr = (x['sender'], x['receiver'])
         dt = datetime.utcfromtimestamp(x['timestamp'])
+
+        year = dt.year
+        month = dt.month
+        day = dt.day
+
         dt_day = (dt.year, dt.month, dt.day)
+
+        if year not in milestones:
+            milestones[year] = {str(k) : [] for k in range(1,13)}
+            milestones[year]["milestones"] = [{
+                "pos" : 0,
+                "id" : k,
+                "freq" : 0,
+                "timestamp" : str(dt_day)
+            } for k in range(1,13)]
+
+        month_normalized = month * 1.0 / 12
+        day_normalized = day * 1.0 / 30
+
+        # print(len(milestones[year]["milestones"]))
+        milestones[year]["milestones"][month-1]["pos"] = month_normalized
+        milestones[year]["milestones"][month-1]["freq"] += 1
+        #if year not in max_freq_months:
+            #max_freq_months[year] = {k : 0 for k in range(1,13)}
+        #max_freq_months[year][month] = max(
+        #    max_freq_months[year][month], milestones[year][month-1]["milestones"]["freq"])
+
+        day_found = False
+        for d in milestones[year][str(month)]:
+            if d["id"] == day:
+                d["freq"] += 1
+                day_found = True
+                break
+                #max_freq_days[]
+        if not day_found:
+            milestones[year][str(month)].append(
+                {
+                    "pos": day * 1.0 / 31,
+                    "id" : year  * 100 + day,
+                    "freq" : 0,
+                    "timestamp" : str(dt_day)
+                })
+
+
+        for k,v in milestones.items():
+            for mk, mv in v.items():
+                if mk == "milestones":
+                    for m in mv:
+                        m["freq"] = m["freq"] * 1.0 / 10
+                else:
+                    for d in mv:
+                        d["freq"] = d["freq"] * 1.0 / 10
+
+        
+        if x['receiver'] not in res:
+            res[x['receiver']] = {
+                "meta" : {
+                    "name" : x['receiver'],
+                },
+                "rawMessages" : [
+                ],
+                "rawPeaks" : {}
+            }
+        res[x['receiver']]["rawMessages"].append(
+            {
+                "sender" : me.first_name,
+                "receiver": x['receiver'],
+                "message": x['message'],
+                "timestamp" : x['timestamp']
+            })
         if sr not in sender_receiver_to_messages:
             sender_receiver_to_messages[sr] = {}
-        if dt_day not in sender_receiver_to_messages[sr]:
-            sender_receiver_to_messages[sr][dt_day] = 0
-        sender_receiver_to_messages[sr][dt_day] += 1
+        if str(dt_day) not in sender_receiver_to_messages[sr]:
+            sender_receiver_to_messages[sr][str(dt_day)] = 0
+        sender_receiver_to_messages[sr][str(dt_day)] += 1
 
+
+    for receiver, d in res.items():
+        if (me.first_name, receiver) in sender_receiver_to_messages:
+            d["rawPeaks"] = sender_receiver_to_messages[(me.first_name, receiver)]
+
+    '''
     for k,v in sender_receiver_to_messages.items():
         print(k)
         for d, c in v.items():
             print(d,c)
+    '''
 
-    return 'Ok'
+    return jsonify(milestones)
 
 
 
@@ -92,11 +181,12 @@ def get_telegram_msgs():
                 payload['sender'] = sender_name
                 payload['receiver'] = receiver_name
                 payload['type'] = 'telegram'
+                payload['channel'] = receiver_name
                 # print(payload)
                 result = messages_db.insert_one(payload)
                 index.add_object(payload)
-                index.set_settings({"searchableAttributes": ["message", "sender", "receiver",
-                                                             "type"]})
+                index.set_settings({"searchableAttributes": [
+                    "message", "sender", "receiver", "type", "channel"]})
     return 'Ok'
 
     '''
@@ -177,9 +267,13 @@ def get_slack_msgs():
         payload['channel'] = channel
         payload['message'] = message
         payload['timestamp'] = timestamp
-        payload['user'] = user_profile
+        payload['sender'] = user_profile
         payload['user_profile'] = user_pic_url
         payload['type'] = 'slack'
+        team_info = slack.team.info().body
+        print(team_info)
+        team = team_info['team']['name']
+        payload['channel'] = team + '.' + payload['channel']
         print(payload)
         result = messages_db.insert_one(payload)
         index.add_object(payload)
