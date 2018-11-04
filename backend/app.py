@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from telethon import TelegramClient, events, sync, utils
 from telethon import functions, types
 from telethon.tl.functions.messages import GetDialogsRequest
@@ -13,8 +13,10 @@ import asyncio
 from datetime import timezone
 from datetime import datetime
 from algoliasearch import algoliasearch
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 slack = Slacker(os.getenv('SLACK_KEY'))
 conn_string = "mongodb://jhack:abcd1234#@ds151513.mlab.com:51513/message-hub"
 client = MongoClient(conn_string)
@@ -48,24 +50,51 @@ def hello_world():
 @app.route('/count', methods=['GET'])
 def get_message_counts_by_day():
     sender_receiver_to_messages = {}
+    me = client.get_me()
     global api_id, messages_db
+
+    res = {}
     for x in messages_db.find():
-        print(x['timestamp'], x['message'])
+        # print(x['timestamp'], x['message'])
+        if 'sender' and 'receiver' not in x:
+            continue
         sr = (x['sender'], x['receiver'])
         dt = datetime.utcfromtimestamp(x['timestamp'])
         dt_day = (dt.year, dt.month, dt.day)
+        if x['receiver'] not in res:
+            res[x['receiver']] = {
+                "meta" : {
+                    "name" : x['receiver'],
+                },
+                "rawMessages" : [
+                ],
+                "rawPeaks" : {}
+            }
+        res[x['receiver']]["rawMessages"].append(
+            {
+                "sender" : me.first_name,
+                "receiver": x['receiver'],
+                "message": x['message'],
+                "timestamp" : x['timestamp']
+            })
         if sr not in sender_receiver_to_messages:
             sender_receiver_to_messages[sr] = {}
-        if dt_day not in sender_receiver_to_messages[sr]:
-            sender_receiver_to_messages[sr][dt_day] = 0
-        sender_receiver_to_messages[sr][dt_day] += 1
+        if str(dt_day) not in sender_receiver_to_messages[sr]:
+            sender_receiver_to_messages[sr][str(dt_day)] = 0
+        sender_receiver_to_messages[sr][str(dt_day)] += 1
 
+
+    for receiver, d in res.items():
+        d["rawPeaks"] = sender_receiver_to_messages[(me.first_name, receiver)]
+
+    '''
     for k,v in sender_receiver_to_messages.items():
         print(k)
         for d, c in v.items():
             print(d,c)
+    '''
 
-    return 'Ok'
+    return jsonify(res)
 
 
 
@@ -92,11 +121,12 @@ def get_telegram_msgs():
                 payload['sender'] = sender_name
                 payload['receiver'] = receiver_name
                 payload['type'] = 'telegram'
+                payload['channel'] = receiver_name
                 # print(payload)
                 result = messages_db.insert_one(payload)
                 index.add_object(payload)
-                index.set_settings({"searchableAttributes": ["message", "sender", "receiver",
-                                                             "type"]})
+                index.set_settings({"searchableAttributes": [
+                    "message", "sender", "receiver", "type", "channel"]})
     return 'Ok'
 
     '''
