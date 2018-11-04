@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import About from './About.js';
 
 class Thumbnails extends Component {
   constructor(){

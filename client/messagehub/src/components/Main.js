@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Timeline from './Timeline.js';
 import Sidebar from './Sidebar.js';
+import axios from "axios";
 
 
 class Main extends Component {
@@ -161,8 +162,29 @@ class Main extends Component {
       activeUser: 0,
       content: content
     }
+  }
 
+  componentDidMount() {
+    axios
+      .get("https://jsonplaceholder.typicode.com/users")
+      .then(response => {
 
+        // create an array of contacts only with relevant data
+        const newContacts = response.data.map(c => {
+          return {
+            id: c.id,
+            name: c.name
+          };
+        });
+        
+        const newState = Object.assign({}, this.state, {
+          contacts: newContacts
+        });
+        console.log(newState)
+        // store the new state object in the component's state
+        //this.setState(newState);
+      })
+      .catch(error => console.log(error));
   }
 
   componentWillMount(){
