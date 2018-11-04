@@ -15,8 +15,8 @@ class TextContents extends Component {
         <div class = "container">
             <About className="about" class = "mt-20" /><hr />
             <About className="about" />
-        </div>    
-        
+        </div>
+
     );
   }
 }

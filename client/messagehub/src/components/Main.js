@@ -8,6 +8,25 @@ class Main extends Component {
     super(props);
 
     this.clickContact = this.clickContact.bind(this);
+    const content =  {
+      messageSum: {
+        topics: ["weather", "november event", "drinking"],
+        texts: 253,
+        participants: ["steph", "carol"],
+      },
+      eventSum: {
+        date: "19.10.2018",
+        location: "Bremen",
+        address: "Campus Road 1",
+        participants: ["steph", "carol"],
+        notes: "-"
+      },
+      imgSum: {
+      }
+    }
+    this.state = {
+      content: content
+    }
 
   }
 
@@ -28,7 +47,7 @@ class Main extends Component {
           </nav>
 
           <div id="content">
-            <Timeline />
+            <Timeline content={this.state.content} />
           </div>
 
           <div class="clearfix"></div>
