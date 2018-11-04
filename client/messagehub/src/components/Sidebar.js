@@ -21,7 +21,7 @@ class Sidebar extends Component {
         name: "Stella",
         img: "",
         timestamp: "14:17"
-      },    
+      },
     ]
     }
 
