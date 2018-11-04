@@ -56,7 +56,7 @@ def get_message_counts_by_day():
     res = {}
     for x in messages_db.find():
         # print(x['timestamp'], x['message'])
-        if 'sender' and 'receiver' not in x or x['type'] =='slack':
+        if 'sender' and 'receiver' not in x:
             continue
         sr = (x['sender'], x['receiver'])
         dt = datetime.utcfromtimestamp(x['timestamp'])
@@ -85,7 +85,8 @@ def get_message_counts_by_day():
 
 
     for receiver, d in res.items():
-        d["rawPeaks"] = sender_receiver_to_messages[(me.first_name, receiver)]
+        if (me.first_name, receiver) in sender_receiver_to_messages:
+            d["rawPeaks"] = sender_receiver_to_messages[(me.first_name, receiver)]
 
     '''
     for k,v in sender_receiver_to_messages.items():
@@ -204,7 +205,7 @@ def get_slack_msgs():
             channel = 'Direct Message'
         if "files" in in_req['event']:
             payload['files'] = in_req['event']['files']
-        payload['receiver'] = channel
+        payload['channel'] = channel
         payload['message'] = message
         payload['timestamp'] = timestamp
         payload['sender'] = user_profile
@@ -213,7 +214,7 @@ def get_slack_msgs():
         team_info = slack.team.info().body
         print(team_info)
         team = team_info['team']['name']
-        payload['receiver'] = team + '.' + payload['receiver']
+        payload['channel'] = team + '.' + payload['channel']
         print(payload)
         result = messages_db.insert_one(payload)
         index.add_object(payload)
