@@ -5,25 +5,6 @@ class Sidebar extends Component {
   constructor(props){
     super(props);
 
-    this.state = {
-      contacts: [
-      {
-        name: "Marie",
-        img: "",
-        timestamp: "20:18"
-      },
-      {
-        name: "Sophie",
-        img: "",
-        timestamp: "19:18"
-      },
-      {
-        name: "Stella",
-        img: "",
-        timestamp: "14:17"
-      }]
-    }
-
   }
 
   componentWillMount(){
@@ -31,7 +12,7 @@ class Sidebar extends Component {
   }
 
   composeContactList(){
-    return this.state.contacts.map((el, i) => <ContactListItem key={"contactlistitem"+i} contact={el} onClick={this.props.onClick} />)
+    return this.props.contacts.map((el, i) => <ContactListItem key={"contactlistitem"+i} contact={el} onClick={this.props.onClick} />)
   }
 
   render() {

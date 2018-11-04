@@ -35,8 +35,8 @@ class InfoTip extends Component {
      return (
        <div class="eventInfo">
          <i class="far fa-calendar"></i>
-         &nbsp; 19.10.2018 <br />
-         Location: {this.props.content.eventSum.locations}<br />
+         &nbsp; {this.props.content.eventSum.date} <br />
+         Location: {this.props.content.eventSum.location}<br />
          Address: <a href="#"> {this.props.content.eventSum.address} </a><br />
          Participants: {this.composeParticipants(this.props.content.eventSum.participants)}<br />
          Notes: {this.props.content.eventSum.notes}<br />

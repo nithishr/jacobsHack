@@ -11,7 +11,7 @@ class ContactListItem extends Component {
 
   render() {
     return (
-      <div className="ContactListItem" onClick={this.props.onClick}>
+      <div className="ContactListItem" onClick={() => this.props.onClick(this.props.contact.id)}>
 
       <div class="row sideBar">
         <div class="row sideBar-body">

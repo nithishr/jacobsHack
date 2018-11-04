@@ -6,7 +6,10 @@ class Timeline extends Component {
   constructor(props){
     super(props);
 
+    this.changePeak = this.changePeak.bind(this);
+
     this.state = {
+      activePeak: 0,
       milestones: [
       {
         pos: "0",
@@ -41,7 +44,11 @@ class Timeline extends Component {
   componentWillMount(){
   }
 
-
+  changePeak(id){
+      this.setState({
+        activePeak: id
+      })
+  }
 
   composeGradient(){
   var percentColors = [
@@ -92,9 +99,6 @@ class Timeline extends Component {
         backgroundImage: gradientString
     };
 
-    console.log(gradientString)
-
-
     return gradientStyle
   }
 
@@ -104,7 +108,7 @@ class Timeline extends Component {
         <i key={"ielement"+id} class="timeline--inner-pin is-featured" style={{
         width: milestone["freq"]*20+"px",
         height: milestone["freq"]*20+"px",
-        left: milestone["pos"] + "%"}} data-title="Featured Pin"></i>
+        left: milestone["pos"] + "%"}} data-title="Featured Pin" onClick={this.changePeak.bind(this, id)} ></i>
       );
   }
 
@@ -113,7 +117,7 @@ class Timeline extends Component {
     return (
       <div id="Timeline">
 
-      <InfoTip content={this.props.content} />
+      <InfoTip content={this.props.content[this.state.activePeak]} />
 
       <div class="timeline-inner">
         <section class="container">
