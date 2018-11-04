@@ -7,9 +7,7 @@ class Tip extends Component {
   constructor(){
     super();
   }
-
   componentWillMount(){
-
   }
 
   render() {
@@ -17,11 +15,9 @@ class Tip extends Component {
       <div id="TipUpper">
         <div class="container">
           <div className="Tip" class = "row">
-
               <div className="text-content" class="col-sm-4">
                 <TextContents />
               </div>
-
               <div className="img-content" class="col-sm-4">
                   <Thumbnails className = "Thumbnails" />
               </div>

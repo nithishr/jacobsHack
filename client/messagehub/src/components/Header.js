@@ -27,9 +27,6 @@ class Header extends Component {
                 <a class="nav-link" href="#">Features</a>
               </li>
             </ul>
-            <span class="navbar-text">
-                Search
-            </span>
           </div>
         </nav>
         </header>

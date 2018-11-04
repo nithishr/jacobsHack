@@ -18,21 +18,18 @@ class Sidebar extends Component {
   render() {
     return (
       <div className="Sidebar">
-
-
             <div class="side">
               <div class="side-one">
                 <div class="row heading">
                   <div class="col-sm-3 col-xs-3 heading-avatar">
                     <div class="heading-avatar-icon">
-                      <img src="jeffbezosprofile.jpg"></img>
+                      <img src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"></img>
                     </div>
                   </div>
                   <div class="heading-dot  pull-right">
-                    Jeff Bezos
+                    Mark Kunder
                   </div>
                 </div>
-
                 <div class="row searchBox">
                   <div class="col-sm-12 searchBox-inner">
                     <div class="form-group has-feedback">
@@ -41,7 +38,6 @@ class Sidebar extends Component {
                     </div>
                   </div>
                 </div>
-
                 <div class="sidebar-contacts">
                   {this.composeContactList()}
                 </div>
