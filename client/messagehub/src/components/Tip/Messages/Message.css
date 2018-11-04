@@ -4,7 +4,7 @@
 }
 
 .messageContainer:hover{
-    background-color: antiquewhite;
+    background-color: #000000;
 }
 .senderName{
     font-weight: bolder;

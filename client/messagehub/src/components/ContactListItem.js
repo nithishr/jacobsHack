@@ -17,7 +17,7 @@ class ContactListItem extends Component {
         <div class="row sideBar-body">
           <div class="col-sm-3 col-xs-3 sideBar-avatar">
             <div class="avatar-icon">
-              <img src="jeffbezosprofile.jpg" />
+              <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260.jpg" />
             </div>
           </div>
           <div class="col-sm-9 col-xs-9 sideBar-main">

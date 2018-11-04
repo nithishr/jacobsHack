@@ -83,35 +83,43 @@ class TimelineLower extends Component {
     }
   }
 
-
-
-
   render() {
     return (
       <div className="TimelineLower">
-
-        <div className="timeline-lower">
-          <div className="timeline-begin texto">
-          {this.state.granularity["day"] + " " + this.state.granularity["month"].toUpperCase() + " " + this.state.granularity["year"]}
-          </div>
-
-          <div class="zoom-utilities">
-            <div class="zoom-button texto" onClick={this.handleClick.bind(this, 0)}>
-              {this.state.granularity["type"]} <i class="fas fa-caret-left"></i>
+        <div className="timeline-lower col-md-112">
+          <div class = "container">
+            <div class = "row">
+              <div class = "col">
+              <div className="timeline-begin texto">
+                {this.state.granularity["day"] + " " + this.state.granularity["month"].toUpperCase() + " " + this.state.granularity["year"]}
+              </div>
+              </div>
+              <div class = "col">
+              <div class="zoom-button texto" onClick={this.handleClick.bind(this, 0)}>
+                <i class="fas fa-caret-left"> {this.state.granularity["type"]} </i>
+              </div>
+              </div>
+              <div class = "col">
+              <div class="zoom-button zoom-button-mid texto" onClick={this.handleClick.bind(this, 2)}>
+                <i class="fas fa-search-plus"></i>
+              </div>
+              </div>
+              <div class = "col">
+              <div class="zoom-button zoom-button-mid texto" onClick={this.handleClick.bind(this, 3)}>
+                <i class="fas fa-search-minus"></i>
+              </div>
+              </div>
+              <div class = "col">
+              <div class="zoom-button texto" onClick={this.handleClick.bind(this, 1)}>
+                {this.state.granularity["type"]} <i class="fas fa-caret-right"></i> 
+              </div>
+              </div>
+              <div class = "col">
+              <div className="timeline-end texto">
+                {this.composeNextDate()}
+              </div>
+              </div>
             </div>
-            <div class="zoom-button zoom-button-mid texto" onClick={this.handleClick.bind(this, 2)}>
-              <i class="fas fa-search-plus"></i>
-            </div>
-            <div class="zoom-button zoom-button-mid texto" onClick={this.handleClick.bind(this, 3)}>
-               <i class="fas fa-search-minus"></i>
-            </div>
-            <div class="zoom-button texto" onClick={this.handleClick.bind(this, 1)}>
-              {this.state.granularity["type"]} <i class="fas fa-caret-right"></i>
-            </div>
-          </div>
-
-          <div className="timeline-end texto">
-          {this.composeNextDate()}
           </div>
 
         </div>
