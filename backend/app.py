@@ -13,8 +13,10 @@ import asyncio
 from datetime import timezone
 from datetime import datetime
 from algoliasearch import algoliasearch
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 slack = Slacker(os.getenv('SLACK_KEY'))
 conn_string = "mongodb://jhack:abcd1234#@ds151513.mlab.com:51513/message-hub"
 client = MongoClient(conn_string)
@@ -53,7 +55,7 @@ def get_message_counts_by_day():
 
     res = {}
     for x in messages_db.find():
-        print(x['timestamp'], x['message'])
+        # print(x['timestamp'], x['message'])
         if 'sender' and 'receiver' not in x:
             continue
         sr = (x['sender'], x['receiver'])
@@ -72,7 +74,8 @@ def get_message_counts_by_day():
             {
                 "sender" : me.first_name,
                 "receiver": x['receiver'],
-                "message": x['message']
+                "message": x['message'],
+                "timestamp" : x['timestamp']
             })
         if sr not in sender_receiver_to_messages:
             sender_receiver_to_messages[sr] = {}
