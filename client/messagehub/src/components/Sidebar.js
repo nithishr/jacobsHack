@@ -2,12 +2,36 @@ import React, { Component } from 'react';
 import ContactListItem from './ContactListItem.js'
 
 class Sidebar extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
+
+    this.state = {
+      contacts: [
+      {
+        name: "Marie",
+        img: "",
+        timestamp: "20:18"
+      },
+      {
+        name: "Sophie",
+        img: "",
+        timestamp: "19:18"
+      },
+      {
+        name: "Stella",
+        img: "",
+        timestamp: "14:17"
+      }]
+    }
+
   }
 
   componentWillMount(){
 
+  }
+
+  composeContactList(){
+    return this.state.contacts.map((el, i) => <ContactListItem key={"contactlistitem"+i} contact={el} />)
   }
 
   render() {
@@ -26,9 +50,6 @@ class Sidebar extends Component {
                   <div class="heading-dot  pull-right">
                     Jeff Bezos
                   </div>
-                  <div class="col-sm-2 col-xs-2 heading-compose  pull-right">
-                    <i class="fa fa-comments fa-2x  pull-right" aria-hidden="true"></i>
-                  </div>
                 </div>
 
                 <div class="row searchBox">
@@ -41,14 +62,7 @@ class Sidebar extends Component {
                 </div>
 
                 <div class="sidebar-contacts">
-                  <ContactListItem />
-                  <ContactListItem />
-                  <ContactListItem />
-                  <ContactListItem />
-                  <ContactListItem />
-                  <ContactListItem />
-                  <ContactListItem />
-                  <ContactListItem />
+                  {this.composeContactList()}
                 </div>
 
 

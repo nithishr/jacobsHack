@@ -9,9 +9,44 @@ body {
 
 #Timeline {
   margin: 0 auto;
-  margin-top: 40%;
   width: 80%;
+}
+
+.timeline-lower {
+  width: 100%;
+  display:block;
+  margin-top: -30px;
+}
+
+.zoom-utilities {
+  width: 100%;
+  display: block;
+  float:center;
+}
+
+.zoom-button {
+padding: 5px;
+width: 100px;
+text-align: center;
+margin-left: 10px;
+float:left;
+border: 1px solid #ffffff;
+}
+
+.zoom-button:hover {
+cursor:pointer;
+background: #999999;
+}
+
+.zoom-button-mid {
+  width: 50px;
+  text-align:center;
+}
+
+
+.timeline-inner {
   height: 40px;
+  margin-top: 50%;
 }
 
 .timeline-vertical{

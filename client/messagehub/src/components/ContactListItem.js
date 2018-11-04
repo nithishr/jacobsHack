@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 
 class ContactListItem extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
   }
 
   componentWillMount(){
@@ -24,11 +24,13 @@ class ContactListItem extends Component {
           <div class="col-sm-9 col-xs-9 sideBar-main">
             <div class="row">
               <div class="col-sm-8 col-xs-8 sideBar-name">
-                <span class="name-meta">Ankit Jain
-              </span>
+                <span class="name-meta">
+                {this.props.contact.name}
+                </span>
               </div>
               <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
-                <span class="time-meta pull-right">18:18
+                <span class="time-meta pull-right">
+                {this.props.contact.timestamp}
               </span>
               </div>
             </div>
