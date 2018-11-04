@@ -107,7 +107,6 @@ class Main extends Component {
         imgSum: {}
       },
     ]},
-
     {
       meta:  {
         id: "2",
@@ -156,8 +155,6 @@ class Main extends Component {
         imgSum: {}
       },
     ]},
-
-
   ]
 
     this.state = {
@@ -165,9 +162,11 @@ class Main extends Component {
       content: content
     }
 
+
   }
 
   componentWillMount(){
+
   }
 
   clickContact(id){
@@ -177,6 +176,7 @@ class Main extends Component {
   }
 
   composeContactList(){
+
    return this.state.content.map((el, i) => el.meta)
   }
 
@@ -190,7 +190,7 @@ class Main extends Component {
           </nav>
 
           <div id="content">
-            <Timeline content={this.state.content[this.state.activeUser].peaks} />
+          <Timeline content={this.state.content[this.state.activeUser].peaks} />
           </div>
 
           <div class="clearfix"></div>

@@ -57,9 +57,9 @@ class InfoTip extends Component {
           <div class="msg-button">
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#messages"><i class="fas fa-envelope"></i></button>
           </div>
-          
+
           {/* Modal */}
-          <div class="modal fade" id="messages" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+          <div class="modal fade" id="messages" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">

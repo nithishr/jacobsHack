@@ -147,14 +147,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0804ef', end
 
 #content{
   float:right;
-  width:67%;
+  width:77%;
 }
 
 .clearfix{
   clear:both;
 }
 
-.sidebar-contacts{ 
+.sidebar-contacts{
   height: 75vh;
 }
 
@@ -860,7 +860,7 @@ p {
 }
 .modal-title{
   text-align: center;
-  display: inline-block; 
+  display: inline-block;
   margin: 0 auto;
 }
 

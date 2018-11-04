@@ -96,7 +96,7 @@ class TimelineLower extends Component {
               </div>
               <div class = "col">
               <div class="zoom-button texto" onClick={this.handleClick.bind(this, 0)}>
-                <i class="fas fa-caret-left"> {this.state.granularity["type"]} </i>
+                <i class="fas fa-caret-left"></i>  {this.state.granularity["type"]} 
               </div>
               </div>
               <div class = "col">
@@ -111,7 +111,7 @@ class TimelineLower extends Component {
               </div>
               <div class = "col">
               <div class="zoom-button texto" onClick={this.handleClick.bind(this, 1)}>
-                {this.state.granularity["type"]} <i class="fas fa-caret-right"></i> 
+                {this.state.granularity["type"]} <i class="fas fa-caret-right"></i>
               </div>
               </div>
               <div class = "col">
