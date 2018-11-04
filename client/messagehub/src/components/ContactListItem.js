@@ -7,12 +7,11 @@ class ContactListItem extends Component {
   }
 
   componentWillMount(){
-
   }
 
   render() {
     return (
-      <div className="ContactListItem">
+      <div className="ContactListItem" onClick={this.props.onClick}>
 
       <div class="row sideBar">
         <div class="row sideBar-body">

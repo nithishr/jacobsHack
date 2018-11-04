@@ -31,7 +31,7 @@ class Sidebar extends Component {
   }
 
   composeContactList(){
-    return this.state.contacts.map((el, i) => <ContactListItem key={"contactlistitem"+i} contact={el} />)
+    return this.state.contacts.map((el, i) => <ContactListItem key={"contactlistitem"+i} contact={el} onClick={this.props.onClick} />)
   }
 
   render() {
